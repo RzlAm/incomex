@@ -13,6 +13,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Tables\Filters\Filter;
 
 class TransactionResource extends Resource
 {
@@ -120,7 +121,16 @@ class TransactionResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Filter::make('date_time')
+                    ->form([
+                        Forms\Components\DatePicker::make('from'),
+                        Forms\Components\DatePicker::make('until'),
+                    ])
+                    ->query(function ($query, array $data) {
+                        return $query
+                            ->when($data['from'], fn($q) => $q->whereDate('date_time', '>=', $data['from']))
+                            ->when($data['until'], fn($q) => $q->whereDate('date_time', '<=', $data['until']));
+                    }),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
