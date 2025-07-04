@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Wallet;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -21,19 +20,10 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
-        Wallet::insert([
-            [
-                'name' => "BRI"
-            ],
-            [
-                'name' => "Dana"
-            ],
-            [
-                'name' => "Dompet"
-            ],
-        ]);
+
 
         $this->call([
+            WalletSeeder::class,
             CategorySeeder::class,
             SettingSeeder::class,
         ]);
