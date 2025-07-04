@@ -32,5 +32,9 @@ class DatabaseSeeder extends Seeder
                 'name' => "Dompet"
             ],
         ]);
+
+        $this->call([
+            CategorySeeder::class,
+        ]);
     }
 }
