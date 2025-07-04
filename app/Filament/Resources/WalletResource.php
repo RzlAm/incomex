@@ -15,6 +15,7 @@ class WalletResource extends Resource
     protected static ?string $model = Wallet::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-wallet';
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
