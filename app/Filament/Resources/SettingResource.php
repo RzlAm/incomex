@@ -24,10 +24,15 @@ class SettingResource extends Resource
                     ->required()
                     ->maxLength(4)
                     ->default('Rp'),
-                Forms\Components\TextInput::make('timezone')
+                Forms\Components\Select::make('timezone')
                     ->required()
-                    ->maxLength(40)
-                    ->default('Asia/Jakarta'),
+                    ->options(
+                        collect(timezone_identifiers_list())
+                            ->mapWithKeys(fn($tz) => [$tz => $tz])
+                            ->toArray()
+                    )
+                    ->default('Asia/Jakarta')
+                    ->searchable(),
             ]);
     }
 
