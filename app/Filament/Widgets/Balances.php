@@ -8,17 +8,17 @@ use App\Models\Wallet;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
-class Balance extends BaseWidget
+class Balances extends BaseWidget
 {
-    protected static ?int $columns = 2; // maksimal 3 kolom
+    public function getColumns(): int
+    {
+        return 3;
+    }
+
+    protected static ?int $sort = 2;
 
     protected function getStats(): array
     {
-        $totalBalance = Transaction::selectRaw("
-            SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) -
-            SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as balance
-        ")->value('balance') ?? 0;
-
         $balances = Transaction::selectRaw("
             wallet_id,
             SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) -
@@ -31,13 +31,12 @@ class Balance extends BaseWidget
 
         $stats = [];
 
-        $stats[] = Stat::make('Total Balance', $currency . ' ' . number_format($totalBalance, 2, ',', '.'));
-
         foreach ($balances as $walletId => $balance) {
             $wallet = Wallet::find($walletId);
             $walletName = $wallet?->name ?? "Wallet #$walletId";
 
-            $stats[] = Stat::make($walletName, $currency . ' ' . number_format($balance, 2, ',', '.'));
+            $stats[] = Stat::make($walletName, $currency . ' ' . number_format($balance, 2, ',', '.'))
+                ->icon('heroicon-o-wallet');
         }
 
         return $stats;

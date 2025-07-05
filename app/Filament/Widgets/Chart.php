@@ -8,8 +8,9 @@ use Filament\Widgets\ChartWidget;
 
 class Chart extends ChartWidget
 {
-    protected static ?string $heading = 'Income & Expense Chart';
-    protected static ?string $height = '400px';
+    protected static ?string $heading = 'Statistic';
+    protected static ?string $maxHeight = '280px';
+    protected static ?int $sort = 3;
     protected static string $color = 'primary';
     protected int | string | array $columnSpan = 'full';
     public ?string $filter = 'month';
@@ -25,7 +26,7 @@ class Chart extends ChartWidget
 
     protected function getType(): string
     {
-        return 'bar';
+        return 'line';
     }
 
     protected function getData(): array
@@ -33,7 +34,6 @@ class Chart extends ChartWidget
         $start = now();
         $end = now();
 
-        // Set range tanggal berdasarkan filter
         switch ($this->filter) {
             case 'week':
                 $start = Carbon::now()->startOfWeek();

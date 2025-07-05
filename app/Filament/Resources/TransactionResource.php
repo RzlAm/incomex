@@ -62,6 +62,9 @@ class TransactionResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->query(
+                Transaction::query()->latest('date_time')
+            )
             ->columns([
                 Tables\Columns\TextColumn::make('category.name')
                     ->label('Category')
