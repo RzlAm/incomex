@@ -1,0 +1,67 @@
+name: Laravel Deploy
+
+on:
+  push:
+    branches: ["main"]
+  # pull_request:
+  #   branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+      - name: Update dependencies
+        run: composer update
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Optimizing Filament for production
+        run: php artisan filament:optimize
+
+      - name: Generate key
+        run: php artisan key:generate
+
+      # - name: Setup storage
+      #   run: php artisan storage:link
+
+      - name: Set directory permissions
+        run: chmod -R 777 storage bootstrap/cache
+
+      - name: Clear config
+        run: php artisan config:clear
+
+      - name: Clear route
+        run: php artisan route:clear
+
+      - name: Clear view
+        run: php artisan view:clear
+
+      # - name: Clear cache
+      #   run: php artisan cache:clear
+
+      # - name: Install NPM dependencies
+      #   run: npm install
+
+      # - name: Build assets
+      #   run: npm run build
+
+      - name: Deploy to FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /htdocs/
