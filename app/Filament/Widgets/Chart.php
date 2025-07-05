@@ -9,7 +9,7 @@ use Filament\Widgets\ChartWidget;
 class Chart extends ChartWidget
 {
     protected static ?string $heading = 'Income & Expense Chart';
-    protected static ?string $maxHeight = '400px';
+    protected static ?string $height = '400px';
     protected static string $color = 'primary';
     protected int | string | array $columnSpan = 'full';
     public ?string $filter = 'month';
