@@ -48,15 +48,15 @@ class ThisPeriodStats extends BaseWidget
             ->sum('amount');
 
         return [
-            Stat::make('Income This Day', $currency . number_format($totalIncomeToday, 0, ',', '.'))
+            Stat::make('Income This Day', $currency . number_format($totalIncomeToday, 2, ',', '.'))
                 ->icon('heroicon-o-arrow-down-circle')
                 ->color('success')
-                ->description('+ ' . $currency . number_format($totalIncomeMonth, 0, ',', '.') . ' this month'),
+                ->description('+ ' . $currency . number_format($totalIncomeMonth, 2, ',', '.') . ' this month'),
 
-            Stat::make('Expense This Day', $currency . number_format($totalExpenseToday, 0, ',', '.'))
+            Stat::make('Expense This Day', $currency . number_format($totalExpenseToday, 2, ',', '.'))
                 ->icon('heroicon-o-arrow-up-circle')
                 ->color('danger')
-                ->description('- ' . $currency . number_format($totalExpenseMonth, 0, ',', '.') . ' this month'),
+                ->description('- ' . $currency . number_format($totalExpenseMonth, 2, ',', '.') . ' this month'),
         ];
     }
 }
