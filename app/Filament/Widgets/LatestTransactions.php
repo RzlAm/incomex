@@ -14,7 +14,7 @@ class LatestTransactions extends BaseWidget
 	protected static ?int $sort = 4;
 
 	protected int | string | array $columnSpan = 'full';
-
+	protected static bool $isLazy = false;
 	protected static ?string $heading = 'Latest Transactions';
 
 	public function table(Table $table): Table

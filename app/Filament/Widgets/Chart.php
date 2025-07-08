@@ -14,6 +14,7 @@ class Chart extends ChartWidget
     protected static string $color = 'primary';
     protected int | string | array $columnSpan = 'full';
     public ?string $filter = 'month';
+    protected static bool $isLazy = false;
 
     protected function getFilters(): ?array
     {

@@ -10,7 +10,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 class ThisPeriodStats extends BaseWidget
 {
     protected static ?int $sort = 1;
-
+    protected static bool $isLazy = false;
     public function getColumns(): int
     {
         return 2;
