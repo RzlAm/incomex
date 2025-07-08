@@ -27,7 +27,7 @@ class TotalBalance extends BaseWidget
         $currency = Setting::first()?->currency ?? 'Rp';
 
         $stats = [];
-        $stats[] = Stat::make('Total Balance', $currency . ' ' . number_format($totalBalance, 2, ',', '.'))
+        $stats[] = Stat::make('Total Balance', $currency . number_format($totalBalance, 2, ',', '.'))
             ->icon('heroicon-o-currency-dollar');
 
         return $stats;

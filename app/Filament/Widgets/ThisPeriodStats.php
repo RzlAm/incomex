@@ -11,6 +11,7 @@ class ThisPeriodStats extends BaseWidget
 {
     protected static ?int $sort = 1;
     protected static bool $isLazy = false;
+
     public function getColumns(): int
     {
         return 2;
@@ -18,30 +19,44 @@ class ThisPeriodStats extends BaseWidget
 
     protected function getStats(): array
     {
-        $start = now();
-        $end = now();
+        // Periode hari ini untuk nilai utama
+        $startDay = now()->startOfDay();
+        $endDay = now()->endOfDay();
 
-        $start = now()->startOfDay();
-        $end = now()->endOfDay();
+        // Periode bulan ini untuk deskripsi
+        $startMonth = now()->startOfMonth();
+        $endMonth = now()->endOfMonth();
 
         $currency = Setting::first()?->currency ?? 'Rp';
 
-        $totalIncome = Transaction::where('type', 'income')
-            ->whereBetween('date_time', [$start, $end])
+        // Total hari ini
+        $totalIncomeToday = Transaction::where('type', 'income')
+            ->whereBetween('date_time', [$startDay, $endDay])
             ->sum('amount');
 
-        $totalExpense = Transaction::where('type', 'expense')
-            ->whereBetween('date_time', [$start, $end])
+        $totalExpenseToday = Transaction::where('type', 'expense')
+            ->whereBetween('date_time', [$startDay, $endDay])
+            ->sum('amount');
+
+        // Total bulan ini untuk deskripsi
+        $totalIncomeMonth = Transaction::where('type', 'income')
+            ->whereBetween('date_time', [$startMonth, $endMonth])
+            ->sum('amount');
+
+        $totalExpenseMonth = Transaction::where('type', 'expense')
+            ->whereBetween('date_time', [$startMonth, $endMonth])
             ->sum('amount');
 
         return [
-            Stat::make('Income This Day', $currency . ' ' . number_format($totalIncome, 2, ',', '.'))
-                ->icon('heroicon-o-arrow-trending-up')
-                ->color('success'),
+            Stat::make('Income This Day', $currency . number_format($totalIncomeToday, 0, ',', '.'))
+                ->icon('heroicon-o-arrow-down-circle')
+                ->color('success')
+                ->description('+ ' . $currency . number_format($totalIncomeMonth, 0, ',', '.') . ' this month'),
 
-            Stat::make('Expense This Day', $currency . ' ' . number_format($totalExpense, 2, ',', '.'))
-                ->icon('heroicon-o-arrow-trending-down')
-                ->color('danger'),
+            Stat::make('Expense This Day', $currency . number_format($totalExpenseToday, 0, ',', '.'))
+                ->icon('heroicon-o-arrow-up-circle')
+                ->color('danger')
+                ->description('- ' . $currency . number_format($totalExpenseMonth, 0, ',', '.') . ' this month'),
         ];
     }
 }

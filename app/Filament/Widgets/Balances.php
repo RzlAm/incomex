@@ -36,7 +36,7 @@ class Balances extends BaseWidget
             $wallet = Wallet::find($walletId);
             $walletName = $wallet?->name ?? "Wallet #$walletId";
 
-            $stats[] = Stat::make($walletName, $currency . ' ' . number_format($balance, 2, ',', '.'))
+            $stats[] = Stat::make($walletName, $currency . number_format($balance, 2, ',', '.'))
                 ->icon('heroicon-o-wallet');
         }
 
