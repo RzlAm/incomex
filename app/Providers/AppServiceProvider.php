@@ -38,12 +38,16 @@ class AppServiceProvider extends ServiceProvider
         ')
         );
 
-        if (Schema::hasTable('settings')) {
-            $tz = DB::table('settings')->value('timezone');
+        $driver = DB::getDriverName();
 
-            if ($tz) {
-                Config::set('app.timezone', $tz);
-                date_default_timezone_set($tz);
+        if ($driver !== 'sqlite') {
+            if (Schema::hasTable('settings')) {
+                $tz = DB::table('settings')->value('timezone');
+
+                if ($tz) {
+                    Config::set('app.timezone', $tz);
+                    date_default_timezone_set($tz);
+                }
             }
         }
     }
