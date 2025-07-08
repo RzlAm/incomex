@@ -88,8 +88,8 @@ class Chart extends ChartWidget
                 [
                     'label' => 'Income',
                     'backgroundColor' => '#16a34a',
-                    'borderWidth' => 0,
-                    'borderColor' => 'transparent',
+                    'borderWidth' => 2,
+                    'borderColor' => '#0f7d38',
                     'borderRadius' => 4,
                     'barThickness' => 15,
                     'data' => $income,
@@ -97,8 +97,8 @@ class Chart extends ChartWidget
                 [
                     'label' => 'Expense',
                     'backgroundColor' => '#dc2626',
-                    'borderWidth' => 0,
-                    'borderColor' => 'transparent',
+                    'borderWidth' => 2,
+                    'borderColor' => '#ba2020',
                     'borderRadius' => 4,
                     'barThickness' => 15,
                     'data' => $expense,
