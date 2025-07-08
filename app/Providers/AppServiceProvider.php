@@ -5,6 +5,9 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\HtmlString;
 
 class AppServiceProvider extends ServiceProvider
@@ -34,5 +37,14 @@ class AppServiceProvider extends ServiceProvider
             <link rel="manifest" href="' . asset('site.webmanifest') . '" />
         ')
         );
+
+        if (Schema::hasTable('settings')) {
+            $tz = DB::table('settings')->value('timezone');
+
+            if ($tz) {
+                Config::set('app.timezone', $tz);
+                date_default_timezone_set($tz);
+            }
+        }
     }
 }
