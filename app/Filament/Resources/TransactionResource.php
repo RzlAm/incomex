@@ -13,6 +13,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
 
 class TransactionResource extends Resource
@@ -68,6 +69,7 @@ class TransactionResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('category.name')
                     ->label('Category')
+                    ->searchable()
                     ->formatStateUsing(
                         fn($state, $record) =>
                         '<div style="display: flex; align-items: center; gap: 0.5rem;">' .
@@ -96,6 +98,7 @@ class TransactionResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('amount')
                     ->label('Amount')
+                    ->searchable()
                     ->sortable()
                     ->formatStateUsing(function ($state) {
                         static $currency = null;
@@ -112,6 +115,7 @@ class TransactionResource extends Resource
                     ->formatStateUsing(fn($state) => Carbon::parse($state)->format('d M Y H:i')),
                 Tables\Columns\TextColumn::make('description')
                     ->label('Description')
+                    ->searchable()
                     ->limit(25)
                     ->tooltip(fn($record) => $record->description),
                 Tables\Columns\TextColumn::make('created_at')
@@ -126,13 +130,38 @@ class TransactionResource extends Resource
             ->filters([
                 Filter::make('date_time')
                     ->form([
-                        Forms\Components\DatePicker::make('from'),
-                        Forms\Components\DatePicker::make('until'),
+                        Forms\Components\DatePicker::make('from')->label('From'),
+                        Forms\Components\DatePicker::make('until')->label('Until'),
                     ])
+                    ->columns(2)
                     ->query(function ($query, array $data) {
                         return $query
                             ->when($data['from'], fn($q) => $q->whereDate('date_time', '>=', $data['from']))
                             ->when($data['until'], fn($q) => $q->whereDate('date_time', '<=', $data['until']));
+                    }),
+                SelectFilter::make('type')
+                    ->options([
+                        'income' => 'Income',
+                        'expense' => 'Expense',
+                    ])
+                    ->label('Type'),
+
+                SelectFilter::make('category_id')
+                    ->label('Category')
+                    ->options(fn() => Category::all()->pluck('name', 'id'))
+                    ->searchable(),
+
+                Filter::make('amount_range')
+                    ->label('Amount Range')
+                    ->form([
+                        Forms\Components\TextInput::make('min')->numeric()->label('Min'),
+                        Forms\Components\TextInput::make('max')->numeric()->label('Max'),
+                    ])
+                    ->columns(2)
+                    ->query(function ($query, array $data) {
+                        return $query
+                            ->when($data['min'], fn($q) => $q->where('amount', '>=', $data['min']))
+                            ->when($data['max'], fn($q) => $q->where('amount', '<=', $data['max']));
                     }),
             ])
             ->actions([
