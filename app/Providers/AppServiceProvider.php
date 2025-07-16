@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         FilamentView::registerRenderHook(
-            PanelsRenderHook::HEAD_START,
+            PanelsRenderHook::HEAD_END,
             fn(): string => new HtmlString('
             <link rel="icon" type="image/png" href="' . asset('favicon-96x96.png') . '" sizes="96x96" />
             <link rel="icon" type="image/svg+xml" href="' . asset('favicon.svg') . '" />
