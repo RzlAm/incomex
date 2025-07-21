@@ -15,6 +15,8 @@
   <a href="https://trakteer.id/rzlam/tip"><img src="https://img.shields.io/badge/Donate-Trakteer-orange" alt="Donate"></a>
 </p>
 
+<img src="https://raw.githubusercontent.com/RzlAm/incomex/refs/heads/main/public/Screenshot.png" alt="Screenshot" />
+
 ---
 
 ## 🧾 About Incomex
