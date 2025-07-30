@@ -3,8 +3,8 @@
 return [
     'name' => 'LaravelPWA',
     'manifest' => [
-        'name' => env('APP_NAME', 'My PWA App'),
-        'short_name' => 'PWA',
+        "name" => "Income and Expense",
+        "short_name" => "Incomex",
         'start_url' => '/',
         'background_color' => '#09090B',
         'theme_color' => '#09090B',
