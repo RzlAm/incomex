@@ -22,6 +22,7 @@ class TransactionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
     protected static ?int $navigationSort = 1;
+
     public static function getNavigationBadge(): ?string
     {
         return (string) Transaction::count();
@@ -34,20 +35,14 @@ class TransactionResource extends Resource
                 Forms\Components\Select::make('wallet_id')
                     ->label('Wallet')
                     ->required()
-                    ->options(
-                        Wallet::all()->pluck('name', 'id')->toArray()
-                    )
-                    ->searchable()
-                    ->required(),
+                    ->options(Wallet::all()->pluck('name', 'id')->toArray())
+                    ->searchable(),
                 Forms\Components\Select::make('category_id')
                     ->label('Category')
                     ->required()
-                    ->options(
-                        Category::all()->pluck('name', 'id')->toArray()
-                    )
+                    ->options(Category::all()->pluck('name', 'id')->toArray())
                     ->searchable(),
-                Forms\Components\DateTimePicker::make('date_time')
-                    ->required(),
+                Forms\Components\DateTimePicker::make('date_time')->required(),
                 Forms\Components\Select::make('type')
                     ->label('Type')
                     ->options([
@@ -59,17 +54,14 @@ class TransactionResource extends Resource
                 Forms\Components\TextInput::make('amount')
                     ->required()
                     ->numeric(),
-                Forms\Components\Textarea::make('description')
-                    ->columnSpanFull(),
+                Forms\Components\Textarea::make('description')->columnSpanFull(),
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->query(
-                Transaction::query()->latest('date_time')
-            )
+            ->query(Transaction::query()->latest('date_time'))
             ->columns([
                 Tables\Columns\TextColumn::make('category.name')
                     ->label('Category')
@@ -86,18 +78,13 @@ class TransactionResource extends Resource
                 Tables\Columns\TextColumn::make('type')
                     ->label('Type')
                     ->badge()
-                    ->formatStateUsing(fn($state) => match ($state) {
-                        'income' => 'Income',
-                        'expense' => 'Expense',
-                        default => $state,
-                    })
+                    ->formatStateUsing(fn($state) => ucfirst($state))
                     ->colors([
                         'success' => 'income',
                         'danger' => 'expense',
                     ])
                     ->sortable(),
                 Tables\Columns\TextColumn::make('wallet.name')
-                    ->numeric()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('amount')
@@ -106,11 +93,9 @@ class TransactionResource extends Resource
                     ->sortable()
                     ->formatStateUsing(function ($state) {
                         static $currency = null;
-
                         if (is_null($currency)) {
                             $currency = Setting::first()?->currency ?? 'Rp';
                         }
-
                         return $currency . number_format($state, 2, ',', '.');
                     }),
                 Tables\Columns\TextColumn::make('date_time')
@@ -122,14 +107,6 @@ class TransactionResource extends Resource
                     ->searchable()
                     ->limit(25)
                     ->tooltip(fn($record) => $record->description),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Filter::make('date_time')
@@ -149,12 +126,10 @@ class TransactionResource extends Resource
                         'expense' => 'Expense',
                     ])
                     ->label('Type'),
-
                 SelectFilter::make('category_id')
                     ->label('Category')
                     ->options(fn() => Category::all()->pluck('name', 'id'))
                     ->searchable(),
-
                 Filter::make('amount_range')
                     ->label('Amount Range')
                     ->form([
@@ -168,16 +143,20 @@ class TransactionResource extends Resource
                             ->when($data['max'], fn($q) => $q->where('amount', '<=', $data['max']));
                     }),
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->contentFooter(
+                function ($livewire) {
+                    $query = $livewire->getFilteredTableQuery();
+                    $income = (clone $query)->where('type', 'income')->sum('amount');
+                    $expense = (clone $query)->where('type', 'expense')->sum('amount');
+
+                    $currency = Setting::first()?->currency ?? 'Rp';
+                    return view('components.transaction-summary', [
+                        'income' => $currency . number_format($income, 2, ',', '.'),
+                        'expense' => $currency . number_format($expense, 2, ',', '.'),
+                        'netBalance' => number_format($income - $expense, 2, ',', '.')
+                    ]);
+                }
+            );
     }
 
     public static function getPages(): array
