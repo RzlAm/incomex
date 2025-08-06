@@ -80,9 +80,17 @@ Incomex is self-hosted only. You can run it locally or on your preferred hosting
     php artisan filament:optimize
     ```
 7. Run database migration and seed
+
     ```bash
     php artisan migrate:fresh --seed
     ```
+
+    (Optional) Run this command to seed example transactions
+
+    ```bash
+    php artisan db:seed --class=TransactionSeeder
+    ```
+
 8. Start the application
     ```bash
     php artisan serve
