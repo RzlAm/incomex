@@ -22,6 +22,10 @@ class TransactionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
     protected static ?int $navigationSort = 1;
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) Transaction::count();
+    }
 
     public static function form(Form $form): Form
     {

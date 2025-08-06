@@ -18,6 +18,11 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
     protected static ?int $navigationSort = 3;
+    protected static ?string $navigationGroup = 'Money';
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) Category::count();
+    }
 
     public static function form(Form $form): Form
     {

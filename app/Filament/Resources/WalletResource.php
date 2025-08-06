@@ -16,6 +16,11 @@ class WalletResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-wallet';
     protected static ?int $navigationSort = 2;
+    protected static ?string $navigationGroup = 'Money';
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) Wallet::count();
+    }
 
     public static function form(Form $form): Form
     {

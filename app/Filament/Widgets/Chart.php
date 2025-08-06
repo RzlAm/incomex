@@ -91,7 +91,7 @@ class Chart extends ChartWidget
                     'borderWidth' => 2,
                     'borderColor' => '#0f7d38',
                     'borderRadius' => 4,
-                    'barThickness' => 15,
+                    'barThickness' => 12,
                     'data' => $income,
                 ],
                 [
@@ -100,7 +100,7 @@ class Chart extends ChartWidget
                     'borderWidth' => 2,
                     'borderColor' => '#ba2020',
                     'borderRadius' => 4,
-                    'barThickness' => 15,
+                    'barThickness' => 12,
                     'data' => $expense,
                 ],
             ],

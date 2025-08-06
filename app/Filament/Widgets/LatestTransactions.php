@@ -21,7 +21,7 @@ class LatestTransactions extends BaseWidget
 	{
 		return $table
 			->query(
-				Transaction::query()->latest('date_time')
+				Transaction::query()->latest('date_time')->limit(10)
 			)
 			->paginated(false)
 			->columns([
@@ -49,6 +49,10 @@ class LatestTransactions extends BaseWidget
 						'danger' => 'expense',
 					])
 					->sortable(),
+				Tables\Columns\TextColumn::make('wallet.name')
+					->numeric()
+					->sortable()
+					->toggleable(isToggledHiddenByDefault: true),
 				Tables\Columns\TextColumn::make('amount')
 					->label('Amount')
 					->sortable()
@@ -64,7 +68,19 @@ class LatestTransactions extends BaseWidget
 				Tables\Columns\TextColumn::make('date_time')
 					->label('Time')
 					->sortable()
-					->formatStateUsing(fn($state) => Carbon::parse($state)->format('d M Y H:i'))
+					->formatStateUsing(fn($state) => Carbon::parse($state)->format('d M Y H:i')),
+				Tables\Columns\TextColumn::make('description')
+					->label('Description')
+					->limit(25)
+					->tooltip(fn($record) => $record->description),
+				Tables\Columns\TextColumn::make('created_at')
+					->dateTime()
+					->sortable()
+					->toggleable(isToggledHiddenByDefault: true),
+				Tables\Columns\TextColumn::make('updated_at')
+					->dateTime()
+					->sortable()
+					->toggleable(isToggledHiddenByDefault: true),
 			]);
 	}
 }
