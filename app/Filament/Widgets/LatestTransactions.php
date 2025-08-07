@@ -51,8 +51,7 @@ class LatestTransactions extends BaseWidget
 					->sortable(),
 				Tables\Columns\TextColumn::make('wallet.name')
 					->numeric()
-					->sortable()
-					->toggleable(isToggledHiddenByDefault: true),
+					->sortable(),
 				Tables\Columns\TextColumn::make('amount')
 					->label('Amount')
 					->sortable()
@@ -72,15 +71,6 @@ class LatestTransactions extends BaseWidget
 				Tables\Columns\TextColumn::make('description')
 					->label('Description')
 					->limit(25)
-					->tooltip(fn($record) => $record->description),
-				Tables\Columns\TextColumn::make('created_at')
-					->dateTime()
-					->sortable()
-					->toggleable(isToggledHiddenByDefault: true),
-				Tables\Columns\TextColumn::make('updated_at')
-					->dateTime()
-					->sortable()
-					->toggleable(isToggledHiddenByDefault: true),
 			]);
 	}
 }
