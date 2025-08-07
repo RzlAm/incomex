@@ -30,7 +30,9 @@
     <div class="flex justify-between items-start sm:items-center gap-3 w-full flex-col sm:flex-row">
       <div>
         <h2 class="text-lg font-semibold">Manual Database Backup</h2>
-        <p class="text-sm text-gray-400">Backup your database manually by downloading the <code>.sql</code> file.</p>
+        <p class="text-sm text-gray-400">
+          Manually back up your database by downloading the latest <code>.sql</code> file.
+        </p>
       </div>
       <x-filament::button icon="heroicon-m-arrow-down-tray" wire:click="backupNow" wire:loading.attr="disabled" style="width: auto; max-width: 120px;">
         Download
@@ -40,24 +42,25 @@
 
   <x-filament::card>
     <div class="mb-4">
-      <h2 class="text-lg font-semibold">Restore Guide</h2>
-      <p class="text-sm text-gray-400">How to use your backup file to restore the data.</p>
+      <h2 class="text-lg font-semibold">Restore Instructions</h2>
+      <p class="text-sm text-gray-400">Follow these steps to restore your database using a backup file.</p>
     </div>
+
     <div>
       <ol class="list-inside text-gray-300 text-sm space-y-1">
-        <li>1. Go to your hosting control panel and open phpMyAdmin.</li>
-        <li>2. Choose the database you want to restore (usually your app database).</li>
+        <li>1. Open phpMyAdmin from your hosting control panel.</li>
+        <li>2. Select the database you want to restore (usually your app's database).</li>
         <li>3. Import the backup:
           <ul class="list-disc list-inside mt-2 space-y-1" style="margin-left: 15px;">
             <li>Click the Import tab.</li>
             <li>Click Choose File and select the backup <code>.sql</code> file.</li>
-            <li>Click Go to start the import.</li>
+            <li>Click Go to begin the import process.</li>
           </ul>
         </li>
       </ol>
 
       <p class="text-sm text-white mt-3 p-3 rounded" style="background-color: #dc2626;">
-        <strong>Warning:</strong> Importing this backup will replace all existing data in your database tables with the backup data. Make sure to <em>back up</em> current data if needed before proceeding.
+        <strong>Warning:</strong> Importing a backup will <u>overwrite all existing data</u> in the database. Make sure to back up your current data before proceeding.
       </p>
 
       <div class="mt-6">
@@ -65,4 +68,5 @@
       </div>
     </div>
   </x-filament::card>
+
 </x-filament::page>
