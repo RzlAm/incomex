@@ -11,6 +11,8 @@ class Backup extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-circle-stack';
     protected static string $view = 'filament.pages.backup';
+    protected static ?int $navigationSort = 4;
+    protected static ?string $navigationGroup = 'Settings';
 
     public function backupNow()
     {
