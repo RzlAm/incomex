@@ -62,10 +62,6 @@
       <p class="text-sm text-white mt-3 p-3 rounded" style="background-color: #dc2626;">
         <strong>Warning:</strong> Importing a backup will <u>overwrite all existing data</u> in the database. Make sure to back up your current data before proceeding.
       </p>
-
-      <div class="mt-6">
-        <img src="{{ asset('images/pma.png') }}" alt="phpMyAdmin Import Screen" class="rounded shadow-md w-full" />
-      </div>
     </div>
   </x-filament::card>
 

@@ -20,6 +20,8 @@ class Statistics extends Page implements Forms\Contracts\HasForms
 
     public array $statisticsData = [];
     public array $categoryData = [];
+    public int $totalIncome = 0;
+    public int $totalExpense = 0;
 
     function darkenColor($hex, $percent = 20)
     {
@@ -68,6 +70,15 @@ class Statistics extends Page implements Forms\Contracts\HasForms
             ->groupBy('date')
             ->pluck('total', 'date')
             ->toArray();
+
+
+        $this->totalIncome = \App\Models\Transaction::where('type', 'income')
+            ->whereBetween('date_time', [$start, $end])
+            ->sum('amount');
+
+        $this->totalExpense = \App\Models\Transaction::where('type', 'expense')
+            ->whereBetween('date_time', [$start, $end])
+            ->sum('amount');
 
         $labels = [];
         $income = [];

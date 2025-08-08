@@ -35,12 +35,7 @@ class AppServiceProvider extends ServiceProvider
             <link rel="apple-touch-icon" sizes="180x180" href="' . asset('apple-touch-icon.png') . '" />
             <meta name="apple-mobile-web-app-title" content="Incomex" />
             <link rel="manifest" href="' . asset('site.webmanifest') . '" />
-
-            <style>
-                .fi-sidebar-nav {
-                    border-right: 2px solid #111114 !important;
-                }
-            </style>
+            <style>.fi-sidebar-nav {border-right: 2px solid #ddd;}.dark .fi-sidebar-nav {border-right: 2px solid #111114 !important;}</style>
         ')
         );
 

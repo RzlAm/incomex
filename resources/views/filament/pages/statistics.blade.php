@@ -63,20 +63,30 @@
     </div>
 
     <div class="flex gap-2 w-full sm:w-auto">
+      <x-filament::button type="submit" wire:click.attr="disabled">
+        Apply
+      </x-filament::button>
       @if (request('startDate') || request('endDate'))
         <x-filament::button href="statistics" tag="a" color="gray" wire:click.attr="disabled">
           Clear
         </x-filament::button>
       @endif
-      <x-filament::button type="submit" wire:click.attr="disabled">
-        Submit
-      </x-filament::button>
-      <x-filament::button wire:click.attr="disabled" href="{{ route('statistics.export.csv', ['startDate' => $startDate, 'endDate' => $endDate]) }}" tag="a" color="info">
+      <x-filament::button wire:click.attr="disabled" href="{{ route('statistics.export.csv', ['startDate' => $startDate, 'endDate' => $endDate]) }}" tag="a" color="gray">
         Export CSV
       </x-filament::button>
     </div>
   </form>
 
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <x-filament::card>
+      <h2 class="font-semibold text-sm text-gray-400 mb-1">Total Income</h2>
+      <p class="text-3xl font-bold">Rp{{ number_format($totalIncome, 2, ',', '.') }}</p>
+    </x-filament::card>
+    <x-filament::card>
+      <h2 class="font-semibold text-sm text-gray-400 mb-1">Total Expense</h2>
+      <p class="text-3xl font-bold">Rp{{ number_format($totalExpense, 2, ',', '.') }}</p>
+    </x-filament::card>
+  </div>
 
   <div class="flex-responsive">
     <section class="py-4 card-statistics fi-section rounded-xl bg-white shadow-sm ring-1 ring-gray-950/5 dark:bg-gray-900 dark:ring-white/10">
