@@ -32,6 +32,8 @@
 -   📊 Basic financial statistics
 -   🌍 Timezone and currency configuration
 -   🏷️ Custom categories
+-   🧾 Export CSV
+-   💾 Manual DB backup
 -   💯 100% open source
 
 ---
