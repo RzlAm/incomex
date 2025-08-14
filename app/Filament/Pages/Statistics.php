@@ -129,8 +129,13 @@ class Statistics extends Page implements Forms\Contracts\HasForms
             '#f87171',
             '#fbbf24',
             '#34d399',
-            '#60a5fa',
-            '#a78bfa'
+            '#accdfc',
+            '#a78bfa',
+            '#f8cd71',
+            '#b5eb4b',
+            '#11cdde',
+            '#704ce6',
+            "#ef8bfa"
         ];
 
         $borderColors = array_map(fn($color) => $this->darkenColor($color, 25), $bgColors);
