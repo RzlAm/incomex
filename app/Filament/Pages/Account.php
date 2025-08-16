@@ -6,6 +6,7 @@ use App\Models\User;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class Account extends Page
 {
@@ -41,11 +42,13 @@ class Account extends Page
             'email.required' => 'email field cannot be empty.',
         ]);
 
-        $setting = User::firstWhere('id', $this->me()->id);
-        $setting->name = $this->name;
-        $setting->email = $this->email;
-        $setting->password = $this->password;
-        $setting->save();
+        $user = User::firstWhere('id', $this->me()->id);
+        $user->name = $this->name;
+        $user->email = $this->email;
+        if (!empty($this->password)) {
+            $user->password = Hash::make($this->password);
+        }
+        $user->save();
 
         Notification::make()
             ->title('Account updated successfully!')
