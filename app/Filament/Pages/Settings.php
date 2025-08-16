@@ -14,7 +14,7 @@ class Settings extends Page
 
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
     protected static string $view = 'filament.pages.settings';
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 6;
     protected static ?string $navigationGroup = 'Settings';
 
     public function mount()
