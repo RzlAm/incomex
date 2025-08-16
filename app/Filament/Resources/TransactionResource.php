@@ -158,12 +158,12 @@ class TransactionResource extends Resource
 
                     $income = (clone $query)
                         ->where('type', 'income')
-                        ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->where('category_id', '!=', 1))
+                        ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->whereHas('category', fn($q2) => $q2->where('slug', '!=', 'internal-transfer')))
                         ->sum('amount');
 
                     $expense = (clone $query)
                         ->where('type', 'expense')
-                        ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->where('category_id', '!=', 1))
+                        ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->whereHas('category', fn($q2) => $q2->where('slug', '!=', 'internal-transfer')))
                         ->sum('amount');
 
                     $currency = Setting::first()?->currency ?? 'Rp';

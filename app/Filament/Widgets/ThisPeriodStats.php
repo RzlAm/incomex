@@ -29,22 +29,22 @@ class ThisPeriodStats extends BaseWidget
 
         $totalIncomeToday = Transaction::where('type', 'income')
             ->whereBetween('date_time', [$startDay, $endDay])
-            ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->where('category_id', '!=', 1))
+            ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->whereHas('category', fn($q2) => $q2->where('slug', '!=', 'internal-transfer')))
             ->sum('amount');
 
         $totalExpenseToday = Transaction::where('type', 'expense')
             ->whereBetween('date_time', [$startDay, $endDay])
-            ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->where('category_id', '!=', 1))
+            ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->whereHas('category', fn($q2) => $q2->where('slug', '!=', 'internal-transfer')))
             ->sum('amount');
 
         $totalIncomeMonth = Transaction::where('type', 'income')
             ->whereBetween('date_time', [$startMonth, $endMonth])
-            ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->where('category_id', '!=', 1))
+            ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->whereHas('category', fn($q2) => $q2->where('slug', '!=', 'internal-transfer')))
             ->sum('amount');
 
         $totalExpenseMonth = Transaction::where('type', 'expense')
             ->whereBetween('date_time', [$startMonth, $endMonth])
-            ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->where('category_id', '!=', 1))
+            ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->whereHas('category', fn($q2) => $q2->where('slug', '!=', 'internal-transfer')))
             ->sum('amount');
 
         return [
