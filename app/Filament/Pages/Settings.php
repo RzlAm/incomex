@@ -30,6 +30,14 @@ class Settings extends Page
 
     public function submit()
     {
+        $this->validate([
+            'currency' => 'required',
+            'timezone' => 'required',
+        ], [
+            'currency.required' => 'Currency field cannot be empty.',
+            'timezone.required' => 'Timezone field cannot be empty.',
+        ]);
+
         $setting = Setting::first() ?? new Setting();
         $setting->currency = $this->currency;
         $setting->timezone = $this->timezone;
