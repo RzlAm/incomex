@@ -143,6 +143,15 @@ class TransactionResource extends Resource
                             ->when($data['max'], fn($q) => $q->where('amount', '<=', $data['max']));
                     }),
             ])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
+            ])
             ->contentFooter(
                 function ($livewire) {
                     $query = $livewire->getFilteredTableQuery();
