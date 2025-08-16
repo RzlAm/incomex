@@ -13,6 +13,18 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         Category::insert([
+            // EXTERNAL AND INTERNAL TRANSFER
+            [
+                'icon' => 'https://ui-avatars.com/api/?name=Internal+Transfer&background=eee&color=000',
+                'name' => 'Internal Transfer',
+                'slug' => 'internal-transfer',
+            ],
+            [
+                'icon' => 'https://ui-avatars.com/api/?name=Transfer&background=00624f&color=fff',
+                'name' => 'Transfer',
+                'slug' => 'transfer',
+            ],
+
             // ===== EXPENSE CATEGORIES =====
             [
                 'icon' => 'https://ui-avatars.com/api/?name=Food&background=FF6B6B&color=fff',

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('currency', 4)->default('Rp');
             $table->string('timezone', 40)->default('Asia/Jakarta');
+            $table->boolean('exclude_internal_transfer')->default(false);
             $table->timestamps();
         });
     }

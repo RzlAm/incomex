@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Models\Setting;
 use App\Models\Transaction;
 use Filament\Forms;
 use Filament\Pages\Page;
@@ -59,6 +60,7 @@ class Statistics extends Page implements Forms\Contracts\HasForms
 
         $incomeData = \App\Models\Transaction::where('type', 'income')
             ->whereBetween('date_time', [$start, $end])
+            ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->whereHas('category', fn($q2) => $q2->where('slug', '!=', 'internal-transfer')))
             ->selectRaw('DATE(date_time) as date, SUM(amount) as total')
             ->groupBy('date')
             ->pluck('total', 'date')
@@ -66,6 +68,7 @@ class Statistics extends Page implements Forms\Contracts\HasForms
 
         $expenseData = \App\Models\Transaction::where('type', 'expense')
             ->whereBetween('date_time', [$start, $end])
+            ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->whereHas('category', fn($q2) => $q2->where('slug', '!=', 'internal-transfer')))
             ->selectRaw('DATE(date_time) as date, SUM(amount) as total')
             ->groupBy('date')
             ->pluck('total', 'date')
@@ -74,10 +77,12 @@ class Statistics extends Page implements Forms\Contracts\HasForms
 
         $this->totalIncome = \App\Models\Transaction::where('type', 'income')
             ->whereBetween('date_time', [$start, $end])
+            ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->whereHas('category', fn($q2) => $q2->where('slug', '!=', 'internal-transfer')))
             ->sum('amount');
 
         $this->totalExpense = \App\Models\Transaction::where('type', 'expense')
             ->whereBetween('date_time', [$start, $end])
+            ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->whereHas('category', fn($q2) => $q2->where('slug', '!=', 'internal-transfer')))
             ->sum('amount');
 
         $labels = [];

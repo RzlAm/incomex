@@ -19,32 +19,32 @@ class ThisPeriodStats extends BaseWidget
 
     protected function getStats(): array
     {
-        // Periode hari ini untuk nilai utama
         $startDay = now()->startOfDay();
         $endDay = now()->endOfDay();
 
-        // Periode bulan ini untuk deskripsi
         $startMonth = now()->startOfMonth();
         $endMonth = now()->endOfMonth();
 
         $currency = Setting::first()?->currency ?? 'Rp';
 
-        // Total hari ini
         $totalIncomeToday = Transaction::where('type', 'income')
             ->whereBetween('date_time', [$startDay, $endDay])
+            ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->whereHas('category', fn($q2) => $q2->where('slug', '!=', 'internal-transfer')))
             ->sum('amount');
 
         $totalExpenseToday = Transaction::where('type', 'expense')
             ->whereBetween('date_time', [$startDay, $endDay])
+            ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->whereHas('category', fn($q2) => $q2->where('slug', '!=', 'internal-transfer')))
             ->sum('amount');
 
-        // Total bulan ini untuk deskripsi
         $totalIncomeMonth = Transaction::where('type', 'income')
             ->whereBetween('date_time', [$startMonth, $endMonth])
+            ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->whereHas('category', fn($q2) => $q2->where('slug', '!=', 'internal-transfer')))
             ->sum('amount');
 
         $totalExpenseMonth = Transaction::where('type', 'expense')
             ->whereBetween('date_time', [$startMonth, $endMonth])
+            ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->whereHas('category', fn($q2) => $q2->where('slug', '!=', 'internal-transfer')))
             ->sum('amount');
 
         return [
