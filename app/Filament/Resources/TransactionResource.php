@@ -155,8 +155,16 @@ class TransactionResource extends Resource
             ->contentFooter(
                 function ($livewire) {
                     $query = $livewire->getFilteredTableQuery();
-                    $income = (clone $query)->where('type', 'income')->sum('amount');
-                    $expense = (clone $query)->where('type', 'expense')->sum('amount');
+
+                    $income = (clone $query)
+                        ->where('type', 'income')
+                        ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->where('category_id', '!=', 1))
+                        ->sum('amount');
+
+                    $expense = (clone $query)
+                        ->where('type', 'expense')
+                        ->when(Setting::first()?->exclude_internal_transfer, fn($q) => $q->where('category_id', '!=', 1))
+                        ->sum('amount');
 
                     $currency = Setting::first()?->currency ?? 'Rp';
                     return view('components.transaction-summary', [

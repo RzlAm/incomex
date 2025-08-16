@@ -10,6 +10,7 @@ class Settings extends Page
 {
     public $currency;
     public $timezone;
+    public $exclude_internal_transfer;
     public $timezones = [];
 
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
@@ -22,6 +23,7 @@ class Settings extends Page
         $setting = Setting::first();
         $this->currency = $setting?->currency;
         $this->timezone = $setting?->timezone;
+        $this->exclude_internal_transfer = $setting?->exclude_internal_transfer;
 
         $this->timezones = collect(timezone_identifiers_list())
             ->mapWithKeys(fn($tz) => [$tz => $tz])
@@ -33,6 +35,7 @@ class Settings extends Page
         $this->validate([
             'currency' => 'required',
             'timezone' => 'required',
+            'exclude_internal_transfer' => 'required|boolean',
         ], [
             'currency.required' => 'Currency field cannot be empty.',
             'timezone.required' => 'Timezone field cannot be empty.',
@@ -41,6 +44,7 @@ class Settings extends Page
         $setting = Setting::first() ?? new Setting();
         $setting->currency = $this->currency;
         $setting->timezone = $this->timezone;
+        $setting->exclude_internal_transfer = $this->exclude_internal_transfer;
         $setting->save();
 
         Notification::make()
