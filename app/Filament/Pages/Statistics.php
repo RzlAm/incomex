@@ -100,7 +100,7 @@ class Statistics extends Page implements Forms\Contracts\HasForms
         // Category Chart
         $categoryData = \App\Models\Transaction::whereBetween('date_time', [$start, $end])
             ->selectRaw('category_id, SUM(amount) as total')
-            ->groupBy('category_id', 'type')
+            ->groupBy('category_id')
             ->orderByDesc('total')
             ->with('category')
             ->limit(10)
