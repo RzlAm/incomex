@@ -6,16 +6,24 @@ use App\Models\Setting;
 use App\Models\Transaction;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Support\HtmlString;
 
 class TotalBalance extends BaseWidget
 {
-    public function getColumns(): int
+    public bool $showBalance = false;
+
+    public function toggleBalance()
     {
-        return 1;
+        $this->showBalance = !$this->showBalance;
     }
 
     protected static ?int $sort = 0;
     protected static bool $isLazy = false;
+
+    public function getColumns(): int
+    {
+        return 1;
+    }
 
     protected function getStats(): array
     {
@@ -26,10 +34,25 @@ class TotalBalance extends BaseWidget
 
         $currency = Setting::first()?->currency ?? 'Rp';
 
-        $stats = [];
-        $stats[] = Stat::make('Total Balance', $currency . number_format($totalBalance, 2, ',', '.'))
-            ->icon('heroicon-o-currency-dollar');
+        $displayValue = $this->showBalance
+            ? $currency . number_format($totalBalance, 2, ',', '.')
+            : '••••••••';
 
-        return $stats;
+        $eyeIcon = $this->showBalance
+            ? 'heroicon-o-eye-slash'
+            : 'heroicon-o-eye';
+
+        $balanceWithIcon = new HtmlString(view('components.toggle-balance', [
+            'balance' => $displayValue,
+            'eyeIcon' => $eyeIcon,
+            'action' => 'toggleBalance',
+        ])->render());
+
+        return [
+            Stat::make('Total Balance', $balanceWithIcon)
+                ->icon('heroicon-o-currency-dollar')
+                ->color('success')
+                ->extraAttributes(['class' => 'relative']),
+        ];
     }
 }
