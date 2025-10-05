@@ -11,3 +11,12 @@
         "Noto Color Emoji";
 }
 
+@media (max-width: 640px) {
+    aside.filament-sidebar {
+        display: none !important;
+    }
+
+    main.filament-main {
+        padding-bottom: 4.5rem !important; /* biar gak ketutupan navbar bawah */
+    }
+}

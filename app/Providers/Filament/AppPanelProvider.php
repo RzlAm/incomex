@@ -59,6 +59,42 @@ class AppPanelProvider extends PanelProvider
                 function (): string {
                     return Blade::render('@laravelPWA');
                 }
+            )->renderHook(
+                PanelsRenderHook::BODY_END,
+                fn(): string => view('components.filament-bottom-navbar', [
+                    'items' => [
+                        [
+                            'label' => 'Dashboard',
+                            'icon'  => 'heroicon-o-home',
+                            'url'   => route('filament.app.pages.dashboard'),
+                            'active' => 'filament.app.pages.dashboard',
+                        ],
+                        [
+                            'label' => 'Statistik',
+                            'icon'  => 'heroicon-o-chart-bar',
+                            'url'   => route('filament.app.pages.statistics'),
+                            'active' => 'filament.app.pages.statistics',
+                        ],
+                        [
+                            'label' => 'Transaksi',
+                            'icon'  => 'heroicon-s-banknotes',
+                            'url'   => route('filament.app.resources.transactions.index'),
+                            'active' => 'filament.app.resources.transactions.*',
+                        ],
+                        [
+                            'label' => 'Backup',
+                            'icon'  => 'heroicon-o-cloud-arrow-up',
+                            'url'   => route('filament.app.pages.backup'),
+                            'active' => 'filament.app.pages.backup',
+                        ],
+                        [
+                            'label' => 'Settings',
+                            'icon'  => 'heroicon-o-cog-6-tooth',
+                            'url'   => route('filament.app.pages.settings'),
+                            'active' => 'filament.app.pages.settings',
+                        ],
+                    ],
+                ])->render()
             );
     }
 }
