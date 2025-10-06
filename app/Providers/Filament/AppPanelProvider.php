@@ -61,40 +61,62 @@ class AppPanelProvider extends PanelProvider
                 }
             )->renderHook(
                 PanelsRenderHook::BODY_END,
-                fn(): string => view('components.filament-bottom-navbar', [
-                    'items' => [
-                        [
-                            'label' => 'Dashboard',
-                            'icon'  => 'heroicon-o-home',
-                            'url'   => route('filament.app.pages.dashboard'),
-                            'active' => 'filament.app.pages.dashboard',
+                function (): ?string {
+                    if (request()->routeIs('filament.app.auth.login')) {
+                        return null;
+                    }
+
+                    return view('components.filament-bottom-navbar', [
+                        'items' => [
+                            [
+                                'label' => 'Home',
+                                'icon'  => 'heroicon-o-home',
+                                'url'   => route('filament.app.pages.dashboard'),
+                                'active' => 'filament.app.pages.dashboard',
+                            ],
+                            [
+                                'label' => 'Statistics',
+                                'icon'  => 'heroicon-o-chart-bar',
+                                'url'   => route('filament.app.pages.statistics'),
+                                'active' => 'filament.app.pages.statistics',
+                            ],
+                            [
+                                'label' => 'Transaksi',
+                                'icon'  => 'heroicon-o-banknotes',
+                                'url'   => route('filament.app.resources.transactions.index'),
+                                'active' => 'filament.app.resources.transactions.*',
+                            ],
+                            [
+                                'label' => 'Backup',
+                                'icon'  => 'heroicon-o-cloud-arrow-up',
+                                'url'   => route('filament.app.pages.backup'),
+                                'active' => 'filament.app.pages.backup',
+                            ],
+                            [
+                                'label' => 'Settings',
+                                'icon'  => 'heroicon-o-cog-6-tooth',
+                                'url'   => route('filament.app.pages.settings'),
+                                'active' => 'filament.app.pages.settings',
+                            ],
                         ],
-                        [
-                            'label' => 'Statistik',
-                            'icon'  => 'heroicon-o-chart-bar',
-                            'url'   => route('filament.app.pages.statistics'),
-                            'active' => 'filament.app.pages.statistics',
-                        ],
-                        [
-                            'label' => 'Transaksi',
-                            'icon'  => 'heroicon-s-banknotes',
-                            'url'   => route('filament.app.resources.transactions.index'),
-                            'active' => 'filament.app.resources.transactions.*',
-                        ],
-                        [
-                            'label' => 'Backup',
-                            'icon'  => 'heroicon-o-cloud-arrow-up',
-                            'url'   => route('filament.app.pages.backup'),
-                            'active' => 'filament.app.pages.backup',
-                        ],
-                        [
-                            'label' => 'Settings',
-                            'icon'  => 'heroicon-o-cog-6-tooth',
-                            'url'   => route('filament.app.pages.settings'),
-                            'active' => 'filament.app.pages.settings',
-                        ],
-                    ],
-                ])->render()
+                    ])->render();
+                }
+            )->renderHook(
+                PanelsRenderHook::BODY_START,
+                fn(): string => "
+                    <style>
+                        body {
+                            padding-bottom: 4.5rem; /* cukup buat tinggi navbar */
+                        }
+
+                        /* biar aman di dark mode juga */
+                        @media (min-width: 640px) {
+                            body {
+                                padding-bottom: 0 !important; /* di desktop, navbar disembunyiin */
+                            }
+                        }
+                    </style>
+                "
             );
     }
 }
