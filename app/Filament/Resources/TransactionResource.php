@@ -23,11 +23,6 @@ class TransactionResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
     protected static ?int $navigationSort = 1;
 
-    public static function getNavigationBadge(): ?string
-    {
-        return (string) Transaction::count();
-    }
-
     public static function form(Form $form): Form
     {
         return $form
@@ -111,9 +106,18 @@ class TransactionResource extends Resource
             ->filters([
                 Filter::make('date_time')
                     ->form([
-                        Forms\Components\DatePicker::make('from')->label('From'),
-                        Forms\Components\DatePicker::make('until')->label('Until'),
-                    ])
+                        Forms\Components\DatePicker::make('from')->label('From')->default(Carbon::now()->startOfMonth()),
+                        Forms\Components\DatePicker::make('until')->label('Until')->default(Carbon::now()->endOfMonth()),
+                    ])->indicateUsing(function (array $data): ?string {
+                        if (! $data['from'] && ! $data['until']) {
+                            return null;
+                        }
+
+                        $from = $data['from'] ? Carbon::parse($data['from'])->translatedFormat('d M Y') : 'Start';
+                        $until = $data['until'] ? Carbon::parse($data['until'])->translatedFormat('d M Y') : 'Now';
+
+                        return "From {$from} - {$until}";
+                    })
                     ->columns(2)
                     ->query(function ($query, array $data) {
                         return $query
